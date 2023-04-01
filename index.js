@@ -15,49 +15,19 @@ app.listen(porta, function(){
 //database
 const database = require("./models/database")
 
-//pedido <->  produto
-app.get("/GetPedidosProdutos/:id_produto", function(req, res){
-    let id_produto = req.params.id_produto //Celular Samsung 
+//urls controller -> controller_detalhes
+const controller = require("./controllers/controller")
+app.get("/", controller)
 
-    database.all(`select produto.nome, pedido.id_pedido, pedido.total, pedido.dataPedido, pedido.titular  
-    from produto
-    full join pedido_detalhes on pedido_detalhes.id_produto = produto.id_produto 
-    full join pedido on pedido_detalhes.id_pedido = pedido.id_pedido
-    where produto.id_produto = "${id_produto}"`, 
-    function(erro, relatorio){
-        if(erro){
-            res.send(erro)
-            console.log(erro)
-        }
-        else{
-            res.send(relatorio)
-        }
-    })
+//autor
+app.post("/add/ator", controller)
+app.get("/allAtores", controller)
 
-})
+//filme
+app.post("/add/filme", controller)
+app.get("/allFilms", controller)
 
-app.get("/geral", function(req, res){
-    
-    database.all(`select produto.nome, pedido.id_pedido, pedido.total, pedido.dataPedido, pedido.titular  
-    from produto
-    full join pedido_detalhes on pedido_detalhes.id_produto = produto.id_produto 
-    full join pedido on pedido_detalhes.id_pedido = pedido.id_pedido`, 
-    function(erro, relatorio){
-        if(erro){
-            res.send(erro)
-            console.log(erro)
-        }
-        else{
-            res.send(relatorio)
-        }
-    })
-
-})
-
-
-
-//urls pedido -> pedido_detalhes
-const pedido = require("./controllers/pedido")
-app.get("/", pedido)
-app.get("/Pedido/:id_pedido", pedido)
-app.post("/createPedido", pedido)
+//autor_filme
+app.post("/Add/Vinculo", controller)
+app.get("/AllVinculos", controller)
+app.get("/AllVinculos/:idAtor", controller)
